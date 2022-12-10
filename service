@@ -1,0 +1,30 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          Stromzaehler starten: S0-Schnittstelle per ISR auswerten und Textdatei schreiben
+# Required-Start:
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Kurze Beschreibung
+# Description:       Längere Bechreibung
+### END INIT INFO
+# Author: Johannes Weber (johannes@webernetz.net)
+ 
+# Aktionen
+case "$1" in
+    start)
+        /home/pi/raspberry-s0-bus-stromzaehler-logger/strom &
+#        /opt/beispiel start
+        ;;
+    stop)
+        killall strom
+#        /opt/beispiel stop
+        ;;
+    restart)
+        killall strom
+        /home/pi/raspberry-s0-bus-stromzaehler-logger/strom &
+#        /opt/beispiel restart
+        ;;
+esac
+ 
+exit 0
