@@ -3,19 +3,16 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <wiringPi.h>
-
+#include <sys/time.h>
 
 // What GPIO input are we using?
 //	This is a wiringPi pin number
 
 #define	BUTTON_PIN	9
 
-// globalCounter:
-//	Global variable to count interrupts
-//	Should be declared volatile to make sure the compiler doesn't cache it.
 
 static volatile int globalCounter = 0 ;
-
+struct timeval stop, start;
 
 /*
  * myInterrupt:
@@ -37,8 +34,8 @@ void myInterrupt (void)
 int main (void)
 {
   int myCounter = 0 ;
-  FILE *datei;
-  int number;
+  FILE *datei_t;
+  int timed;
 
   if (wiringPiSetup () < 0)
   {
@@ -55,14 +52,19 @@ int main (void)
 
   for (;;)
   {
-    while (myCounter == globalCounter)
-      delay (50) ;
 
-    datei = fopen ("/home/pi/raspberry-s0-bus-stromzaehler-logger/stromcounter", "w");
-    fscanf(datei, "%d", &number) ;
-    number = number + 1 ;
-    fprintf (datei, "%d\n", number);
-    fclose (datei);
+    gettimeofday(&start, NULL);
+
+    while (myCounter == globalCounter)
+      delay (100) ;
+
+    gettimeofday(&stop, NULL);
+
+    timed = (stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec;
+    datei_t = fopen ("/home/pi/raspberry-s0-bus-stromzaehler-logger/stomtimed", "w");
+    fprintf (datei_t, "%d\n", timed);
+    fclose (datei_t);
+
 
     myCounter = globalCounter ;
   }
