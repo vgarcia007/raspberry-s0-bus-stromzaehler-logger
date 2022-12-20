@@ -56,11 +56,13 @@ int main (void)
     gettimeofday(&start, NULL);
 
     while (myCounter == globalCounter)
-      delay (100) ;
+      delay (50) ;
 
     gettimeofday(&stop, NULL);
 
     timed = (stop.tv_sec - start.tv_sec) * 1000000 + stop.tv_usec - start.tv_usec;
+
+
     datei_t = fopen ("/home/pi/raspberry-s0-bus-stromzaehler-logger/stomtimed", "w");
     fprintf (datei_t, "%d\n", timed);
     fclose (datei_t);
