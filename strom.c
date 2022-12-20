@@ -38,7 +38,7 @@ int main (void)
 {
   int myCounter = 0 ;
   FILE *datei;
-  int number;
+  int number = 0;
 
   if (wiringPiSetup () < 0)
   {
@@ -58,8 +58,11 @@ int main (void)
     while (myCounter == globalCounter)
       delay (50) ;
 
-    datei = fopen ("/home/pi/raspberry-s0-bus-stromzaehler-logger/stromcounter", "w");
+    datei = fopen ("/home/pi/raspberry-s0-bus-stromzaehler-logger/stromcounter", "r");
     fscanf(datei, "%d", &number) ;
+    fclose (datei);
+    //printf("Hello, please enter your age:\n");
+    datei = fopen ("/home/pi/raspberry-s0-bus-stromzaehler-logger/stromcounter", "w");
     number = number + 1 ;
     fprintf (datei, "%d\n", number);
     fclose (datei);
